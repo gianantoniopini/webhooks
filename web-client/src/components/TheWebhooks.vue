@@ -1,19 +1,19 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount } from 'vue';
+import { connection, start } from '@/hubs/notification-hub';
 
-const time = ref('');
+const onEmailSent = (email) => {
+  console.info('emailSent', email);
+};
 
-onMounted(() => {
-  const connection = new WebSocket('wss://localhost:5001/ws');
+onBeforeMount(() => {
+  start();
 
-  connection.onopen = (event) => {
-    console.info('Successfully connected to the websocket server...');
-  };
+  connection.on('emailSent', onEmailSent);
+});
 
-  connection.onmessage = (event) => {
-    console.log(event);
-    time = event.data;
-  };
+onBeforeUnmount(() => {
+  connection.off('emailSent', onEmailSent);
 });
 </script>
 
