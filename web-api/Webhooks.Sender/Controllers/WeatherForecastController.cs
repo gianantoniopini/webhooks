@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace web_api.Controllers
+namespace Webhooks.Sender.Controllers
 {
     [ApiController]
     [Route("[controller]")]

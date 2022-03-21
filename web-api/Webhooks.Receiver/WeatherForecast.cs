@@ -1,6 +1,6 @@
 using System;
 
-namespace web_api
+namespace Webhooks.Receiver
 {
     public class WeatherForecast
     {
