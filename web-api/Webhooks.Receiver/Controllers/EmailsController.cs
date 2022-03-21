@@ -9,13 +9,13 @@ namespace Webhooks.Receiver.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EmailController : ControllerBase
+    public class EmailsController : ControllerBase
     {
-        private readonly ILogger<EmailController> _logger;
+        private readonly ILogger<EmailsController> _logger;
 
         private readonly IHubContext<NotificationHub> _notificationHubContext;
 
-        public EmailController(ILogger<EmailController> logger, IHubContext<NotificationHub> notificationHubContext)
+        public EmailsController(ILogger<EmailsController> logger, IHubContext<NotificationHub> notificationHubContext)
         {
             _logger = logger;
             _notificationHubContext = notificationHubContext;
