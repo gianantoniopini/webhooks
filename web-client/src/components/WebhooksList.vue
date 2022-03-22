@@ -61,22 +61,31 @@ onMounted(() => {
       </form>
     </div>
     <div class="col-12 pt-2">
-      <div class="row border border-dark bg-light fw-bold">
-        <div class="col-lg-5 border border-dark text-lg-start">Id</div>
-        <div class="col-lg-4 border border-dark text-lg-start">Payload Url</div>
-        <div class="col-lg-3 border border-dark text-lg-start">Is Active</div>
-      </div>
-      <div
-        v-for="(webhook, index) in webhooks.data"
-        :key="index"
-        class="row border"
-      >
-        <div class="col-lg-5 border text-lg-start">{{ webhook.id }}</div>
-        <div class="col-lg-4 border text-lg-start">
-          {{ webhook.payloadUrl }}
-        </div>
-        <div class="col-lg-3 border text-lg-start">{{ webhook.isActive }}</div>
-      </div>
+      <table class="table table-responsive">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">Payload Url</th>
+            <th scope="col" class="text-center">Active</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(webhook, index) in webhooks.data" :key="index">
+            <th scope="row">{{ index + 1 }}</th>
+            <td>{{ webhook.id }}</td>
+            <td>{{ webhook.payloadUrl }}</td>
+            <td class="text-center">
+              <input
+                v-model="webhook.isActive"
+                type="checkbox"
+                class="form-check-input"
+                disabled
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
