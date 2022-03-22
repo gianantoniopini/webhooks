@@ -28,7 +28,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 text-center">
       <h1>Webhooks</h1>
     </div>
   </div>

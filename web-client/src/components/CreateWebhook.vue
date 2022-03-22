@@ -16,6 +16,7 @@ watch(payloadUrl, (value) => {
 });
 
 const invalid = computed(() => validationErrors.payloadUrl.length > 0);
+const createButtonDisabled = computed(() => loading.value || invalid.value);
 
 const createWebhook = async () => {
   validatePayloadUrl(payloadUrl.value);
@@ -61,9 +62,9 @@ const onSubmit = () => {
       <h4>Create Webhook</h4>
     </div>
     <div class="col-12">
-      <form class="row form" @submit.prevent="onSubmit">
-        <div class="form-group col-lg-8">
-          <label for="payloadUrl" class="form-label">Payload Url:</label>
+      <form class="row g-2" @submit.prevent="onSubmit">
+        <div class="col-12">
+          <label for="payloadUrl" class="form-label">Payload Url</label>
           <input
             id="payloadUrl"
             v-model="payloadUrl"
@@ -82,18 +83,20 @@ const onSubmit = () => {
             {{ validationErrors.payloadUrl }}
           </div>
         </div>
-        <div class="form-group col-lg-4">
-          <label for="isActive" class="form-label">Active:</label>
-          <input
-            id="isActive"
-            v-model="isActive"
-            type="text"
-            class="form-control"
-          />
+        <div class="col-12">
+          <div class="form-check">
+            <input
+              id="isActive"
+              v-model="isActive"
+              type="checkbox"
+              class="form-check-input"
+            />
+            <label for="isActive" class="form-check-label">Active</label>
+          </div>
         </div>
         <div class="col-12 pt-2">
           <button
-            :disabled="loading"
+            :disabled="createButtonDisabled"
             type="submit"
             class="btn btn-primary"
             @click="createWebhook"
