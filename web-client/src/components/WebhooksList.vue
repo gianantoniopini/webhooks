@@ -2,6 +2,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import WebhooksService from '@/services/webhooks.service';
+import { onError } from '@/utils/error-handling';
 
 const loading = ref(false);
 const webhooks = reactive({
@@ -22,24 +23,13 @@ const retrieveWebhooks = async () => {
   );
 
   try {
-    webhooks.data = await WebhooksService.getRegisteredWebhooks();
+    webhooks.data = await WebhooksService.getWebhooks();
   } catch (error) {
     onError(error);
   } finally {
     closeToast();
     loading.value = false;
   }
-};
-
-const onError = (error) => {
-  createToast('An unexpected error occurred. Please try again.', {
-    position: 'top-center',
-    showCloseButton: true,
-    timeout: 4000,
-    transition: 'slide',
-    type: 'warning'
-  });
-  console.error(error);
 };
 
 const onSubmit = () => {
@@ -55,7 +45,6 @@ onMounted(() => {
   <div class="row">
     <div class="col-12">
       <h4>Registered Webhooks</h4>
-      <hr />
     </div>
     <div class="col-12">
       <form class="row form" @submit.prevent="onSubmit">
@@ -82,15 +71,11 @@ onMounted(() => {
         :key="index"
         class="row border"
       >
-        <div class="col-lg-5 border text-lg-start">
-          {{ webhook.id }}
-        </div>
+        <div class="col-lg-5 border text-lg-start">{{ webhook.id }}</div>
         <div class="col-lg-4 border text-lg-start">
           {{ webhook.payloadUrl }}
         </div>
-        <div class="col-lg-3 border text-lg-start">
-          {{ webhook.isActive }}
-        </div>
+        <div class="col-lg-3 border text-lg-start">{{ webhook.isActive }}</div>
       </div>
     </div>
   </div>
