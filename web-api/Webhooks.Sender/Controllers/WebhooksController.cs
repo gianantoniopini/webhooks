@@ -44,42 +44,16 @@ namespace Webhooks.Sender.Controllers
             return webhook;
         }
 
-        // PUT: api/Webhooks/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutWebhook(long id, Webhook webhook)
-        {
-            if (id != webhook.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(webhook).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!WebhookExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Webhooks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Webhook>> PostWebhook(Webhook webhook)
         {
+            if (WebhookExists(webhook.PayloadUrl))
+            {
+                return UnprocessableEntity($"A {nameof(Webhook)} with {nameof(Webhook.PayloadUrl)} {webhook.PayloadUrl} already exists.");
+            }
+
             _context.Webhooks.Add(webhook);
             await _context.SaveChangesAsync();
 
@@ -102,9 +76,9 @@ namespace Webhooks.Sender.Controllers
             return NoContent();
         }
 
-        private bool WebhookExists(long id)
+        private bool WebhookExists(string payloadUrl)
         {
-            return _context.Webhooks.Any(e => e.Id == id);
+            return _context.Webhooks.Any(e => e.PayloadUrl == payloadUrl);
         }
     }
 }

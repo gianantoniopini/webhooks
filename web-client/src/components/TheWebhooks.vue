@@ -2,6 +2,7 @@
 import { onBeforeMount, onBeforeUnmount } from 'vue';
 import { createToast } from 'mosha-vue-toastify';
 import { connection, start } from '@/hubs/notification-hub';
+import WebhooksList from '@/components/WebhooksList.vue';
 
 const onEmailSent = (email) => {
   createToast(`Email sent to ${email.to}`, {
@@ -26,4 +27,5 @@ onBeforeUnmount(() => {
 
 <template>
   <h1>Webhooks</h1>
+  <WebhooksList />
 </template>
