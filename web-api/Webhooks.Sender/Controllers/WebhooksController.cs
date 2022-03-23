@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Webhooks.Sender.DbContexts;
 using Webhooks.Sender.Models;
+using Webhooks.Sender.ResourceModels;
 
 namespace Webhooks.Sender.Controllers
 {
@@ -47,12 +49,14 @@ namespace Webhooks.Sender.Controllers
         // POST: api/Webhooks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Webhook>> PostWebhook(Webhook webhook)
+        public async Task<ActionResult<Webhook>> PostWebhook(CreateWebhookRequest request)
         {
-            if (WebhookExists(webhook.PayloadUrl))
+            if (WebhookExists(request.PayloadUrl))
             {
-                return UnprocessableEntity($"A {nameof(Webhook)} with {nameof(Webhook.PayloadUrl)} {webhook.PayloadUrl} already exists.");
+                return UnprocessableEntity($"A {nameof(Webhook)} with {nameof(Webhook.PayloadUrl)} {request.PayloadUrl} already exists.");
             }
+
+            var webhook = ToModel(request);
 
             _context.Webhooks.Add(webhook);
             await _context.SaveChangesAsync();
@@ -79,6 +83,13 @@ namespace Webhooks.Sender.Controllers
         private bool WebhookExists(string payloadUrl)
         {
             return _context.Webhooks.Any(e => e.PayloadUrl == payloadUrl);
+        }
+
+        private Webhook ToModel(CreateWebhookRequest request)
+        {
+            var webhook = new Webhook { PayloadUrl = request.PayloadUrl, IsActive = request.IsActive, CreatedAt = DateTimeOffset.UtcNow };
+
+            return webhook;
         }
     }
 }

@@ -1,8 +1,7 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue';
-import { createToast } from 'mosha-vue-toastify';
-import WebhooksService from '@/services/webhooks.service';
-import { onError } from '@/utils/error-handling';
+import { createWebhook } from '@/services/webhooks.service';
+import { handleError } from '@/utils/error-handling';
 
 const loading = ref(false);
 const payloadUrl = ref('');
@@ -18,27 +17,18 @@ watch(payloadUrl, (value) => {
 const invalid = computed(() => validationErrors.payloadUrl.length > 0);
 const createButtonDisabled = computed(() => loading.value || invalid.value);
 
-const createWebhook = async () => {
+const onCreate = async () => {
   validatePayloadUrl(payloadUrl.value);
   if (invalid.value) {
     return;
   }
 
   loading.value = true;
-  const { close: closeToast } = createToast('Creating new webhook...', {
-    position: 'top-center',
-    showCloseButton: false,
-    timeout: -1,
-    transition: 'slide',
-    type: 'info'
-  });
-
   try {
-    await WebhooksService.createWebhook(payloadUrl.value, isActive.value);
+    await createWebhook(payloadUrl.value, isActive.value);
   } catch (error) {
-    onError(error);
+    handleError(error);
   } finally {
-    closeToast();
     loading.value = false;
   }
 };
@@ -99,7 +89,7 @@ const onSubmit = () => {
             :disabled="createButtonDisabled"
             type="submit"
             class="btn btn-primary"
-            @click="createWebhook"
+            @click="onCreate"
           >
             Create
           </button>

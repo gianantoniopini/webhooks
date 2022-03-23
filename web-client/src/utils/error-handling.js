@@ -1,6 +1,6 @@
 import { createToast } from 'mosha-vue-toastify';
 
-const onError = (error) => {
+const handleError = (error) => {
   createToast('An unexpected error occurred. Please try again.', {
     position: 'top-center',
     showCloseButton: true,
@@ -11,4 +11,4 @@ const onError = (error) => {
   console.error(error);
 };
 
-export { onError };
+export { handleError };

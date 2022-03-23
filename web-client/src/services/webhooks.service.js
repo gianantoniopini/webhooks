@@ -1,16 +1,21 @@
-import { webhooksSenderAxiosInstance } from '@/utils/http-utils';
+import axios from 'axios';
 
-class WebhooksService {
-  async getWebhooks() {
-    const { data } = await webhooksSenderAxiosInstance.get('/Webhooks');
-
-    return data;
+const axiosInstance = axios.create({
+  baseURL: process.env.VUE_APP_WEBHOOKS_SENDER_API_BASE_URL,
+  headers: {
+    'Content-type': 'application/json'
   }
+});
 
-  async createWebhook(payloadUrl, isActive) {
-    const webhook = { id: 0, payloadUrl, isActive };
-    await webhooksSenderAxiosInstance.post('/Webhooks', webhook);
-  }
-}
+const getWebhooks = async () => {
+  const { data } = await axiosInstance.get('/Webhooks');
 
-export default new WebhooksService();
+  return data;
+};
+
+const createWebhook = async (payloadUrl, isActive) => {
+  const request = { payloadUrl, isActive };
+  await axiosInstance.post('/Webhooks', request);
+};
+
+export { getWebhooks, createWebhook };

@@ -2,7 +2,7 @@ import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 const connection = new HubConnectionBuilder()
   .withUrl(process.env.VUE_APP_NOTIFICATION_HUB_URL)
-  .configureLogging(LogLevel.Information)
+  .configureLogging(LogLevel.None)
   .build();
 
 const start = () => {

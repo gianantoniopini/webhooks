@@ -1,33 +1,21 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
-import { createToast } from 'mosha-vue-toastify';
-import WebhooksService from '@/services/webhooks.service';
-import { onError } from '@/utils/error-handling';
+import { getWebhooks } from '@/services/webhooks.service';
+import { handleError } from '@/utils/error-handling';
 
 const loading = ref(false);
 const webhooks = reactive({
   data: []
 });
 
-const retrieveWebhooks = async () => {
+const onRefresh = async () => {
   loading.value = true;
-  const { close: closeToast } = createToast(
-    'Retrieving registered webhooks...',
-    {
-      position: 'top-center',
-      showCloseButton: false,
-      timeout: -1,
-      transition: 'slide',
-      type: 'info'
-    }
-  );
 
   try {
-    webhooks.data = await WebhooksService.getWebhooks();
+    webhooks.data = await getWebhooks();
   } catch (error) {
-    onError(error);
+    handleError(error);
   } finally {
-    closeToast();
     loading.value = false;
   }
 };
@@ -37,7 +25,7 @@ const onSubmit = () => {
 };
 
 onMounted(() => {
-  retrieveWebhooks();
+  onRefresh();
 });
 </script>
 
@@ -53,7 +41,7 @@ onMounted(() => {
             :disabled="loading"
             type="submit"
             class="btn btn-primary"
-            @click="retrieveWebhooks"
+            @click="onRefresh"
           >
             Refresh
           </button>
@@ -68,6 +56,7 @@ onMounted(() => {
             <th scope="col">Id</th>
             <th scope="col">Payload Url</th>
             <th scope="col" class="text-center">Active</th>
+            <th scope="col" class="text-end">Created At</th>
           </tr>
         </thead>
         <tbody>
@@ -83,6 +72,7 @@ onMounted(() => {
                 disabled
               />
             </td>
+            <td class="text-end">{{ webhook.createdAt }}</td>
           </tr>
         </tbody>
       </table>
