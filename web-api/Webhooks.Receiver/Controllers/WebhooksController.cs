@@ -3,28 +3,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.SignalR;
 using Webhooks.Receiver.Hubs;
-using Webhooks.Receiver.Models;
 
 namespace Webhooks.Receiver.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EmailsController : ControllerBase
+    public class WebhooksController : ControllerBase
     {
-        private readonly ILogger<EmailsController> _logger;
+        private readonly ILogger<WebhooksController> _logger;
 
         private readonly IHubContext<NotificationHub> _notificationHubContext;
 
-        public EmailsController(ILogger<EmailsController> logger, IHubContext<NotificationHub> notificationHubContext)
+        public WebhooksController(ILogger<WebhooksController> logger, IHubContext<NotificationHub> notificationHubContext)
         {
             _logger = logger;
             _notificationHubContext = notificationHubContext;
         }
 
-        [HttpPost("sent")]
-        public async Task EmailSent(Email email)
+        [HttpPost("Receive")]
+        public async Task<ActionResult> ReceiveWebhook(string message)
         {
-            await _notificationHubContext.Clients.All.SendAsync("emailSent", email);
+            await _notificationHubContext.Clients.All.SendAsync("webhookReceived", message);
+
+            return NoContent();
         }
     }
 }

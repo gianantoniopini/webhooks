@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +77,35 @@ namespace Webhooks.Sender.Controllers
 
             _context.Webhooks.Remove(webhook);
             await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // POST: api/Webhooks/Send
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("Send")]
+        public async Task<ActionResult> SendWebhooks()
+        {
+            var activeWebhooks = _context.Webhooks.Where(e => e.IsActive);
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                foreach (var webhook in activeWebhooks)
+                {
+                    try
+                    {
+                        var response = await httpClient.PostAsync(webhook.PayloadUrl, null);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            _logger.LogError("Received response with status code {0} after sending POST request to {1}", response.StatusCode, webhook.PayloadUrl);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failed to send POST request to {0}", webhook.PayloadUrl);
+                    }
+                }
+            }
 
             return NoContent();
         }

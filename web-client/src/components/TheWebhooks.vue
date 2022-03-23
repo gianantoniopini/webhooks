@@ -5,8 +5,8 @@ import { connection, start } from '@/hubs/notification-hub';
 import CreateWebhook from '@/components/CreateWebhook.vue';
 import WebhooksList from '@/components/WebhooksList.vue';
 
-const onEmailSent = (email) => {
-  createToast(`Email sent to ${email.to}`, {
+const onWebhookReceived = (message) => {
+  createToast(`Webhook received with message ${message}`, {
     position: 'top-center',
     showCloseButton: true,
     timeout: 4000,
@@ -18,11 +18,11 @@ const onEmailSent = (email) => {
 onBeforeMount(() => {
   start();
 
-  connection.on('emailSent', onEmailSent);
+  connection.on('webhookReceived', onWebhookReceived);
 });
 
 onBeforeUnmount(() => {
-  connection.off('emailSent', onEmailSent);
+  connection.off('webhookReceived', onWebhookReceived);
 });
 </script>
 
