@@ -1,14 +1,16 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { defineProps, onMounted, reactive, ref, watch } from 'vue';
 import { getWebhooks } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';
+
+const props = defineProps(['newWebhook']);
 
 const loading = ref(false);
 const webhooks = reactive({
   data: []
 });
 
-const onRefresh = async () => {
+const refresh = async () => {
   loading.value = true;
 
   try {
@@ -20,8 +22,12 @@ const onRefresh = async () => {
   }
 };
 
+watch(props.newWebhook, () => {
+  refresh();
+});
+
 onMounted(() => {
-  onRefresh();
+  refresh();
 });
 </script>
 
@@ -35,7 +41,7 @@ onMounted(() => {
         :disabled="loading"
         type="button"
         class="btn btn-secondary"
-        @click="onRefresh"
+        @click="refresh"
       >
         Refresh
       </button>

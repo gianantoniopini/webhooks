@@ -1,7 +1,15 @@
 <script setup>
+import { reactive } from 'vue';
+
 import CreateWebhook from '@/components/CreateWebhook.vue';
 import SendWebhooks from '@/components/SendWebhooks.vue';
 import WebhooksList from '@/components/WebhooksList.vue';
+
+const newWebhook = reactive({});
+
+const onWebhookCreated = (webhook) => {
+  newWebhook.value = webhook;
+};
 </script>
 
 <template>
@@ -15,7 +23,7 @@ import WebhooksList from '@/components/WebhooksList.vue';
       <hr />
     </div>
   </div>
-  <CreateWebhook />
+  <CreateWebhook @webhook-created="onWebhookCreated" />
   <div class="row">
     <div class="col-12">
       <hr />
@@ -27,5 +35,5 @@ import WebhooksList from '@/components/WebhooksList.vue';
       <hr />
     </div>
   </div>
-  <WebhooksList />
+  <WebhooksList :new-webhook="newWebhook" />
 </template>

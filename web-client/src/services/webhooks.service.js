@@ -15,7 +15,10 @@ const getWebhooks = async () => {
 
 const createWebhook = async (payloadUrl, isActive) => {
   const request = { payloadUrl, isActive };
-  await axiosInstance.post('/Webhooks', request);
+
+  const { data: webhook } = await axiosInstance.post('/Webhooks', request);
+
+  return webhook;
 };
 
 const sendWebhooks = async () => {

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, defineEmits, reactive, ref, watch } from 'vue';
 import { createWebhook } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';
 
@@ -17,6 +17,8 @@ watch(payloadUrl, (value) => {
 const invalid = computed(() => validationErrors.payloadUrl.length > 0);
 const createButtonDisabled = computed(() => loading.value || invalid.value);
 
+const emit = defineEmits(['webhookCreated']);
+
 const onCreate = async () => {
   validatePayloadUrl(payloadUrl.value);
   if (invalid.value) {
@@ -26,7 +28,9 @@ const onCreate = async () => {
   loading.value = true;
 
   try {
-    await createWebhook(payloadUrl.value, isActive.value);
+    const webhook = await createWebhook(payloadUrl.value, isActive.value);
+
+    emit('webhookCreated', webhook);
   } catch (error) {
     handleError(error);
   } finally {
