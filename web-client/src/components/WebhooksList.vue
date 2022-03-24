@@ -20,10 +20,6 @@ const onRefresh = async () => {
   }
 };
 
-const onSubmit = () => {
-  // Do nothing
-};
-
 onMounted(() => {
   onRefresh();
 });
@@ -35,18 +31,14 @@ onMounted(() => {
       <h4>Registered Webhooks</h4>
     </div>
     <div class="col-12">
-      <form class="row form" @submit.prevent="onSubmit">
-        <div class="col-12">
-          <button
-            :disabled="loading"
-            type="submit"
-            class="btn btn-primary"
-            @click="onRefresh"
-          >
-            Refresh
-          </button>
-        </div>
-      </form>
+      <button
+        :disabled="loading"
+        type="button"
+        class="btn btn-secondary"
+        @click="onRefresh"
+      >
+        Refresh
+      </button>
     </div>
     <div class="col-12 pt-2">
       <table class="table table-responsive">

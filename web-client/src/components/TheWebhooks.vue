@@ -1,29 +1,7 @@
 <script setup>
-import { onBeforeMount, onBeforeUnmount } from 'vue';
-import { createToast } from 'mosha-vue-toastify';
-import { connection, start } from '@/hubs/notification-hub';
 import CreateWebhook from '@/components/CreateWebhook.vue';
+import SendWebhooks from '@/components/SendWebhooks.vue';
 import WebhooksList from '@/components/WebhooksList.vue';
-
-const onWebhookReceived = (message) => {
-  createToast(`Webhook received with message ${message}`, {
-    position: 'top-center',
-    showCloseButton: true,
-    timeout: 4000,
-    transition: 'slide',
-    type: 'info'
-  });
-};
-
-onBeforeMount(() => {
-  start();
-
-  connection.on('webhookReceived', onWebhookReceived);
-});
-
-onBeforeUnmount(() => {
-  connection.off('webhookReceived', onWebhookReceived);
-});
 </script>
 
 <template>
@@ -38,6 +16,12 @@ onBeforeUnmount(() => {
     </div>
   </div>
   <CreateWebhook />
+  <div class="row">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+  <SendWebhooks />
   <div class="row">
     <div class="col-12">
       <hr />

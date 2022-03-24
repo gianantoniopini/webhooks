@@ -18,4 +18,8 @@ const createWebhook = async (payloadUrl, isActive) => {
   await axiosInstance.post('/Webhooks', request);
 };
 
-export { getWebhooks, createWebhook };
+const sendWebhooks = async () => {
+  await axiosInstance.post('/Webhooks/Send');
+};
+
+export { getWebhooks, createWebhook, sendWebhooks };

@@ -24,6 +24,7 @@ const onCreate = async () => {
   }
 
   loading.value = true;
+
   try {
     await createWebhook(payloadUrl.value, isActive.value);
   } catch (error) {
