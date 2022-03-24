@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineEmits, reactive, ref, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { createWebhook } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';
 

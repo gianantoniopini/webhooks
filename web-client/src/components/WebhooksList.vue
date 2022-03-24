@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, onMounted, reactive, ref, watch } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 import { getWebhooks } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';
 
