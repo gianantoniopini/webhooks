@@ -26,7 +26,7 @@ namespace Webhooks.Receiver.Controllers
         {
             await _notificationHubContext.Clients.All.SendAsync("webhookReceived", webhookPayload);
 
-            return NoContent();
+            return Ok();
         }
     }
 }

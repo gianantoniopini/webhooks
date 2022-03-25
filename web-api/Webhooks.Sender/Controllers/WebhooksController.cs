@@ -95,7 +95,7 @@ namespace Webhooks.Sender.Controllers
                 await SendWebhook(webhook);
             }
 
-            return NoContent();
+            return Ok();
         }
 
         private static Webhook ToModel(CreateWebhookRequest request)
