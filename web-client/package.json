@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint --no-fix"
+    "lint": "vue-cli-service lint --no-fix",
+    "serve:production": "http-server ./dist --port 8080 --brotli --gzip --proxy http://localhost:8080?"
   },
   "dependencies": {
     "@microsoft/signalr": "^6.0.3",
@@ -28,6 +29,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.0.3",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "vue-cli-plugin-compression": "~1.2.0"
   }
 }
