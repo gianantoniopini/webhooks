@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -88,26 +90,19 @@ namespace Webhooks.Sender.Controllers
         {
             var activeWebhooks = _context.Webhooks.Where(e => e.IsActive);
 
-            using (HttpClient httpClient = new HttpClient())
+            foreach (var webhook in activeWebhooks)
             {
-                foreach (var webhook in activeWebhooks)
-                {
-                    try
-                    {
-                        var response = await httpClient.PostAsync(webhook.PayloadUrl, null);
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            _logger.LogError("Received response with status code {0} after sending POST request to {1}", response.StatusCode, webhook.PayloadUrl);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "Failed to send POST request to {0}", webhook.PayloadUrl);
-                    }
-                }
+                await SendWebhook(webhook);
             }
 
             return NoContent();
+        }
+
+        private static Webhook ToModel(CreateWebhookRequest request)
+        {
+            var webhook = new Webhook { PayloadUrl = request.PayloadUrl, IsActive = request.IsActive, CreatedAt = DateTimeOffset.UtcNow };
+
+            return webhook;
         }
 
         private bool WebhookExists(string payloadUrl)
@@ -115,11 +110,27 @@ namespace Webhooks.Sender.Controllers
             return _context.Webhooks.Any(e => e.PayloadUrl == payloadUrl);
         }
 
-        private Webhook ToModel(CreateWebhookRequest request)
+        private async Task SendWebhook(Webhook webhook)
         {
-            var webhook = new Webhook { PayloadUrl = request.PayloadUrl, IsActive = request.IsActive, CreatedAt = DateTimeOffset.UtcNow };
+            try
+            {
+                var webhookPayload = new WebhookPayload { Message = $"{DateTimeOffset.UtcNow.ToString(CultureInfo.InvariantCulture)} - Hallo from {nameof(Webhook)} {webhook.Id.ToString(CultureInfo.InvariantCulture)}" };
 
-            return webhook;
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    var response = await httpClient.PostAsJsonAsync<WebhookPayload>(webhook.PayloadUrl, webhookPayload);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        _logger.LogError("Received response with status code {0} after sending POST request to {1}", response.StatusCode, webhook.PayloadUrl);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send POST request to {0}", webhook.PayloadUrl);
+            }
+
         }
     }
+
 }

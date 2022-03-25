@@ -19,14 +19,17 @@ const onSend = async () => {
   }
 };
 
-const onWebhookReceived = (message) => {
-  createToast(`Webhook received with message ${message}`, {
-    position: 'top-center',
-    showCloseButton: true,
-    timeout: 4000,
-    transition: 'slide',
-    type: 'info'
-  });
+const onWebhookReceived = (webhookPayload) => {
+  createToast(
+    `Received webhook payload with message '${webhookPayload.message}'`,
+    {
+      position: 'top-center',
+      showCloseButton: true,
+      timeout: 4000,
+      transition: 'slide',
+      type: 'info'
+    }
+  );
 };
 
 onBeforeMount(() => {

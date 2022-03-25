@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.SignalR;
 using Webhooks.Receiver.Hubs;
+using Webhooks.Receiver.ResourceModels;
 
 namespace Webhooks.Receiver.Controllers
 {
@@ -21,9 +22,9 @@ namespace Webhooks.Receiver.Controllers
         }
 
         [HttpPost("Receive")]
-        public async Task<ActionResult> ReceiveWebhook(string message)
+        public async Task<ActionResult> ReceiveWebhook(WebhookPayload webhookPayload)
         {
-            await _notificationHubContext.Clients.All.SendAsync("webhookReceived", message);
+            await _notificationHubContext.Clients.All.SendAsync("webhookReceived", webhookPayload);
 
             return NoContent();
         }
