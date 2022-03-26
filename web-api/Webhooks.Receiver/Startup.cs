@@ -26,9 +26,10 @@ namespace Webhooks.Receiver
                         options.AddPolicy(name: _allowAnyOrigin,
                                           builder =>
                                           {
-                                              builder.AllowAnyOrigin()
-                                                     .AllowAnyHeader()
-                                                     .AllowAnyMethod();
+                                              builder.AllowAnyHeader()
+                                                     .AllowAnyMethod()
+                                                     .SetIsOriginAllowed((host) => true)
+                                                     .AllowCredentials();
                                           });
                     });
 
