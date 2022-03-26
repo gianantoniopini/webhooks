@@ -10,16 +10,28 @@ namespace Webhooks.Receiver
 {
     public class Startup
     {
+        private readonly string _allowAnyOrigin = "_allowAnyOrigin";
+
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+                    {
+                        options.AddPolicy(name: _allowAnyOrigin,
+                                          builder =>
+                                          {
+                                              builder.AllowAnyOrigin()
+                                                     .AllowAnyHeader()
+                                                     .AllowAnyMethod();
+                                          });
+                    });
+
             services.AddControllers();
 
             services.AddSignalR();
@@ -30,7 +42,6 @@ namespace Webhooks.Receiver
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -47,6 +58,8 @@ namespace Webhooks.Receiver
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(_allowAnyOrigin);
 
             app.UseAuthorization();
 
