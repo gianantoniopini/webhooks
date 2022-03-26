@@ -54,7 +54,7 @@ const onSubmit = () => {
 <template>
   <div class="row">
     <div class="col-12">
-      <h4>Create Webhook</h4>
+      <h2>Create Webhook</h2>
     </div>
     <div class="col-12">
       <form class="row g-2" @submit.prevent="onSubmit">

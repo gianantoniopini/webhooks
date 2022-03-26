@@ -46,7 +46,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="row">
     <div class="col-12">
-      <h4>Send Webhooks</h4>
+      <h2>Send Webhooks</h2>
     </div>
     <div class="col-12">
       <button
