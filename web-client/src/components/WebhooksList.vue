@@ -3,7 +3,13 @@ import { onMounted, reactive, ref, watch } from 'vue';
 import { getWebhooks } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';
 
-const props = defineProps(['newWebhook']);
+const props = defineProps({
+  newWebhook: {
+    type: Object,
+    default: undefined,
+    required: false
+  }
+});
 
 const loading = ref(false);
 const webhooks = reactive({
