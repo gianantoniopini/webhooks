@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Polly;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Polly;
 using Webhooks.Sender.DbContexts;
 
 namespace Webhooks.Sender
