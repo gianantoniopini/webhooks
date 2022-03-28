@@ -22,10 +22,13 @@ namespace Webhooks.Sender.Controllers
 
         private readonly WebhooksContext _context;
 
-        public WebhooksController(ILogger<WebhooksController> logger, WebhooksContext context)
+        private readonly IHttpClientFactory _clientFactory;
+
+        public WebhooksController(ILogger<WebhooksController> logger, WebhooksContext context, IHttpClientFactory clientFactory)
         {
             _logger = logger;
             _context = context;
+            _clientFactory = clientFactory;
         }
 
         // GET: api/Webhooks
@@ -112,25 +115,21 @@ namespace Webhooks.Sender.Controllers
 
         private async Task SendWebhook(Webhook webhook)
         {
-            try
-            {
-                var webhookPayload = new WebhookPayload { Message = $"{DateTimeOffset.UtcNow.ToString(CultureInfo.InvariantCulture)} - Hallo from {nameof(Webhook)} {webhook.Id.ToString(CultureInfo.InvariantCulture)}" };
+            var webhookPayload = new WebhookPayload { Message = $"{DateTimeOffset.UtcNow.ToString(CultureInfo.InvariantCulture)} - Hallo from {nameof(Webhook)} {webhook.Id.ToString(CultureInfo.InvariantCulture)}" };
 
-                using (HttpClient httpClient = new HttpClient())
+            using (HttpClient httpClient = _clientFactory.CreateClient("WebhookSender"))
+            {
+                try
                 {
                     var response = await httpClient.PostAsJsonAsync<WebhookPayload>(webhook.PayloadUrl, webhookPayload);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        _logger.LogError("Received response with status code {0} after sending POST request to {1}", response.StatusCode, webhook.PayloadUrl);
-                    }
+
+                    response.EnsureSuccessStatusCode();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to send POST request to {0}", webhook.PayloadUrl);
                 }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to send POST request to {0}", webhook.PayloadUrl);
-            }
-
         }
     }
-
 }

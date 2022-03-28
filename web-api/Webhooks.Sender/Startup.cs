@@ -1,8 +1,10 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Polly;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Webhooks.Sender.DbContexts;
@@ -22,6 +24,15 @@ namespace Webhooks.Sender
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient("WebhookSender")
+                    .AddTransientHttpErrorPolicy(
+                        p => p.WaitAndRetryAsync(new[]
+                        {
+                            TimeSpan.FromSeconds(1),
+                            TimeSpan.FromSeconds(5),
+                            TimeSpan.FromSeconds(10)
+                        }));
+
             services.AddCors(options =>
                     {
                         options.AddPolicy(name: _allowAnyOrigin,
