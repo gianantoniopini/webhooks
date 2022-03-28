@@ -22,6 +22,10 @@ const refresh = async () => {
   }
 };
 
+const formatDate = (date) => {
+  return new Date(date).toUTCString();
+};
+
 watch(props.newWebhook, () => {
   refresh();
 });
@@ -61,7 +65,7 @@ onMounted(() => {
             <td>{{ webhook.id }}</td>
             <td>{{ webhook.payloadUrl }}</td>
             <td>{{ webhook.isActive ? 'Active' : 'Disabled' }}</td>
-            <td class="text-end">{{ webhook.createdAt }}</td>
+            <td class="text-end">{{ formatDate(webhook.createdAt) }}</td>
           </tr>
         </tbody>
       </table>
