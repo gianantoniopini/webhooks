@@ -57,7 +57,7 @@ const onSubmit = () => {
       <h2>Create Webhook</h2>
     </div>
     <div class="col-12">
-      <form class="row g-2" @submit.prevent="onSubmit">
+      <form class="row g-3" @submit.prevent="onSubmit">
         <div class="col-12">
           <label for="payloadUrl" class="form-label">Payload Url</label>
           <input
@@ -89,7 +89,7 @@ const onSubmit = () => {
             <label for="isActive" class="form-check-label">Active</label>
           </div>
         </div>
-        <div class="col-12 pt-2">
+        <div class="col-12">
           <button
             :disabled="createButtonDisabled"
             type="submit"

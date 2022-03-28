@@ -50,26 +50,17 @@ onMounted(() => {
       <table class="table table-responsive">
         <thead class="table-light">
           <tr>
-            <th scope="col">#</th>
             <th scope="col">Id</th>
             <th scope="col">Payload Url</th>
-            <th scope="col" class="text-center">Active</th>
+            <th scope="col">Status</th>
             <th scope="col" class="text-end">Created At</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(webhook, index) in webhooks.data" :key="index">
-            <th scope="row">{{ index + 1 }}</th>
             <td>{{ webhook.id }}</td>
             <td>{{ webhook.payloadUrl }}</td>
-            <td class="text-center">
-              <input
-                v-model="webhook.isActive"
-                type="checkbox"
-                class="form-check-input"
-                disabled
-              />
-            </td>
+            <td>{{ webhook.isActive ? 'Active' : 'Disabled' }}</td>
             <td class="text-end">{{ webhook.createdAt }}</td>
           </tr>
         </tbody>
