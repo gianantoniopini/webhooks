@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Webhooks.Sender.DbContexts;
 using Webhooks.Sender.Models;
 using Webhooks.Sender.ResourceModels;
+using Webhooks.Sender.Mappers;
 
 namespace Webhooks.Sender.Controllers
 {
@@ -62,7 +63,7 @@ namespace Webhooks.Sender.Controllers
                 return UnprocessableEntity($"A {nameof(Webhook)} with {nameof(Webhook.PayloadUrl)} {request.PayloadUrl} already exists.");
             }
 
-            var webhook = ToModel(request);
+            var webhook = ModelMapper.ToModel(request);
 
             _context.Webhooks.Add(webhook);
             await _context.SaveChangesAsync();
@@ -93,43 +94,33 @@ namespace Webhooks.Sender.Controllers
         {
             var activeWebhooks = _context.Webhooks.Where(e => e.IsActive);
 
-            foreach (var webhook in activeWebhooks)
-            {
-                await SendWebhook(webhook);
-            }
+            var tasks = activeWebhooks.Select(webhook => SendWebhook(_logger, _clientFactory, webhook));
+            await Task.WhenAll(tasks);
 
             return Ok();
         }
 
-        private static Webhook ToModel(CreateWebhookRequest request)
+        private static async Task SendWebhook(ILogger<WebhooksController> logger, IHttpClientFactory clientFactory, Webhook webhook)
         {
-            var webhook = new Webhook { PayloadUrl = request.PayloadUrl, IsActive = request.IsActive, CreatedAt = DateTimeOffset.UtcNow };
+            var webhookPayload = new WebhookPayload { Message = $"{DateTimeOffset.UtcNow.ToString(CultureInfo.InvariantCulture)} - Hallo from {nameof(Webhook)} {webhook.Id.ToString(CultureInfo.InvariantCulture)}" };
 
-            return webhook;
+            try
+            {
+                var httpClient = clientFactory.CreateClient("WebhookSender");
+
+                var response = await httpClient.PostAsJsonAsync<WebhookPayload>(webhook.PayloadUrl, webhookPayload);
+
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to send POST request to {0}", webhook.PayloadUrl);
+            }
         }
 
         private bool WebhookExists(string payloadUrl)
         {
             return _context.Webhooks.Any(e => e.PayloadUrl == payloadUrl);
-        }
-
-        private async Task SendWebhook(Webhook webhook)
-        {
-            var webhookPayload = new WebhookPayload { Message = $"{DateTimeOffset.UtcNow.ToString(CultureInfo.InvariantCulture)} - Hallo from {nameof(Webhook)} {webhook.Id.ToString(CultureInfo.InvariantCulture)}" };
-
-            using (HttpClient httpClient = _clientFactory.CreateClient("WebhookSender"))
-            {
-                try
-                {
-                    var response = await httpClient.PostAsJsonAsync<WebhookPayload>(webhook.PayloadUrl, webhookPayload);
-
-                    response.EnsureSuccessStatusCode();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to send POST request to {0}", webhook.PayloadUrl);
-                }
-            }
         }
     }
 }
