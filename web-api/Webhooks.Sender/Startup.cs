@@ -46,7 +46,7 @@ namespace Webhooks.Sender
 
             services.AddControllers();
 
-            services.AddDbContext<WebhooksContext>(opt => opt.UseInMemoryDatabase("Webhooks"));
+            services.AddDbContext<WebhooksContext>(opt => opt.UseSqlite(Configuration.GetConnectionString("WebhooksConnection")));
 
             services.AddSwaggerGen(c =>
             {
@@ -54,10 +54,11 @@ namespace Webhooks.Sender
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WebhooksContext context)
         {
             if (env.IsDevelopment())
             {
+                context.Database.EnsureCreated();
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
