@@ -6,8 +6,8 @@ const connection = new HubConnectionBuilder()
   .build();
 
 const start = () => {
-  connection.start().catch((err) => {
-    console.error('Failed to connect to notification hub', err);
+  connection.start().catch((error) => {
+    console.error('Failed to connect to notification hub', error);
   });
 };
 

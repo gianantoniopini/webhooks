@@ -1,6 +1,9 @@
+// eslint-disable-next-line unicorn/prefer-module
 const { defineConfig } = require('@vue/cli-service');
+// eslint-disable-next-line unicorn/prefer-module
 const zlib = require('zlib');
 
+// eslint-disable-next-line unicorn/prefer-module
 module.exports = defineConfig({
   devServer: {
     port: process.env.VUE_APP_DEV_SERVER_PORT
