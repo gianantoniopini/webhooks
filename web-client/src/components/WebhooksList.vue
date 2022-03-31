@@ -41,6 +41,7 @@ onMounted(() => {
 });
 </script>
 
+<!-- prettier-ignore -->
 <template>
   <div class="row">
     <div class="col-12">
@@ -60,18 +61,34 @@ onMounted(() => {
       <table class="table table-responsive">
         <thead class="table-light">
           <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Payload Url</th>
-            <th scope="col">Status</th>
-            <th scope="col" class="text-end">Created At</th>
+            <th scope="col">
+              Id
+            </th>
+            <th scope="col">
+              Payload Url
+            </th>
+            <th scope="col">
+              Status
+            </th>
+            <th
+              scope="col"
+              class="text-end"
+            >
+              Created At
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(webhook, index) in webhooks.data" :key="index">
+          <tr
+            v-for="(webhook, index) in webhooks.data"
+            :key="index"
+          >
             <td>{{ webhook.id }}</td>
             <td>{{ webhook.payloadUrl }}</td>
             <td>{{ webhook.isActive ? 'Active' : 'Disabled' }}</td>
-            <td class="text-end">{{ formatDate(webhook.createdAt) }}</td>
+            <td class="text-end">
+              {{ formatDate(webhook.createdAt) }}
+            </td>
           </tr>
         </tbody>
       </table>

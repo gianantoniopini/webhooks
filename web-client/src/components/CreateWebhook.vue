@@ -51,15 +51,22 @@ const onSubmit = () => {
 };
 </script>
 
+<!-- prettier-ignore -->
 <template>
   <div class="row">
     <div class="col-12">
       <h2>Create Webhook</h2>
     </div>
     <div class="col-12">
-      <form class="row g-3" @submit.prevent="onSubmit">
+      <form
+        class="row g-3"
+        @submit.prevent="onSubmit"
+      >
         <div class="col-12">
-          <label for="payloadUrl" class="form-label">Payload Url</label>
+          <label
+            for="payloadUrl"
+            class="form-label"
+          >Payload Url</label>
           <input
             id="payloadUrl"
             v-model="payloadUrl"
@@ -69,7 +76,7 @@ const onSubmit = () => {
             :class="{
               'is-invalid': validationErrors.payloadUrl
             }"
-          />
+          >
           <div
             id="payloadUrlInvalidFeedback"
             class="invalid-feedback"
@@ -85,8 +92,11 @@ const onSubmit = () => {
               v-model="isActive"
               type="checkbox"
               class="form-check-input"
-            />
-            <label for="isActive" class="form-check-label">Active</label>
+            >
+            <label
+              for="isActive"
+              class="form-check-label"
+            >Active</label>
           </div>
         </div>
         <div class="col-12">

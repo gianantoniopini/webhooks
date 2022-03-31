@@ -12,6 +12,7 @@ const onWebhookCreated = (webhook) => {
 };
 </script>
 
+<!-- prettier-ignore -->
 <template>
   <div class="row">
     <div class="col-12 text-center">
@@ -20,19 +21,19 @@ const onWebhookCreated = (webhook) => {
   </div>
   <div class="row">
     <div class="col-12">
-      <hr />
+      <hr>
     </div>
   </div>
   <CreateWebhook @webhook-created="onWebhookCreated" />
   <div class="row">
     <div class="col-12">
-      <hr />
+      <hr>
     </div>
   </div>
   <SendWebhooks />
   <div class="row">
     <div class="col-12">
-      <hr />
+      <hr>
     </div>
   </div>
   <WebhooksList :new-webhook="newWebhook" />
