@@ -4,7 +4,7 @@ Small application to create and send webhooks.
 
 ## Requirements
 
-- [.NET 5.0 SDK][1]
+- [.NET 6.0][1]
 - [Node.js][2]
 - [npm][3]
 - [http-server][4] (only required to start the production version of the web-client)
@@ -73,7 +73,7 @@ npm run serve:production
 
 <!-- MARKDOWN LINKS -->
 
-[1]: https://dotnet.microsoft.com/en-us/download/dotnet/5.0
+[1]: https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 [2]: https://nodejs.org/en/download/current/
 [3]: https://nodejs.org/en/download/current/
 [4]: https://www.npmjs.com/package/http-server
