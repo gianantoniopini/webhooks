@@ -36,7 +36,9 @@ namespace Webhooks.Sender.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Webhook>>> GetWebhooks()
         {
-            return await _context.Webhooks.ToListAsync();
+            var webhooks = await _context.Webhooks.ToListAsync();
+
+            return Ok(webhooks);
         }
 
         // GET: api/Webhooks/5

@@ -1,0 +1,1 @@
+dotnet test -l "console;verbosity=normal" /p:CollectCoverage=true /p:Threshold=8 /p:ThresholdType=line /p:CoverletOutput='./Coverage/coverage.json'
