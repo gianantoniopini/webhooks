@@ -2,6 +2,8 @@
 
 Small application to create and send webhooks.
 
+[![Webhooks.Sender](https://github.com/gianantoniopini/webhooks/actions/workflows/webhooks-sender.yml/badge.svg)](https://github.com/gianantoniopini/webhooks/actions/workflows/webhooks-sender.yml)
+
 ## Requirements
 
 - [.NET 6.0][1]
