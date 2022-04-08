@@ -6,7 +6,8 @@ on:
     branches: [master]
 
 env:
-  DOTNET_VERSION: "6.0.201"
+  DOTNET_VERSION: 6.0.201
+  CONFIGURATION: Release
 
 jobs:
   build-and-test:
@@ -27,13 +28,13 @@ jobs:
         run: dotnet restore "./web-api/Webhooks.Sender"
 
       - name: Webhooks.Sender - Build
-        run: dotnet build "./web-api/Webhooks.Sender" --configuration Release --no-restore
+        run: dotnet build "./web-api/Webhooks.Sender" --configuration $CONFIGURATION --no-restore
 
       - name: Webhooks.Sender.Tests - Install dependencies
         run: dotnet restore "./web-api/Webhooks.Sender.Tests"
 
       - name: Webhooks.Sender.Tests - Build
-        run: dotnet build "./web-api/Webhooks.Sender.Tests" --configuration Release --no-restore
+        run: dotnet build "./web-api/Webhooks.Sender.Tests" --configuration $CONFIGURATION --no-restore
 
       - name: Webhooks.Sender.Tests - Test
-        run: dotnet test "./web-api/Webhooks.Sender.Tests" --no-restore --logger "console;verbosity=normal" /p:CollectCoverage=true /p:Threshold=13 /p:ThresholdType=line /p:CoverletOutput="./Coverage/coverage.json"
+        run: dotnet test "./web-api/Webhooks.Sender.Tests" --configuration $CONFIGURATION --no-build --logger "console;verbosity=normal" /p:CollectCoverage=true /p:Threshold=13 /p:ThresholdType=line /p:CoverletOutput="./Coverage/coverage.json"
