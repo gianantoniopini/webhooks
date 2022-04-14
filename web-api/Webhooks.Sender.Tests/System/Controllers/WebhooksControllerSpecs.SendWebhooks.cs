@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Contrib.HttpClient;
 using Xunit;
@@ -30,9 +31,9 @@ namespace Webhooks.Sender.Tests.System.Controllers
 
             // Assert
             _httpMessageHandler.VerifyAnyRequest(Times.Exactly(2));
-            _httpMessageHandler.VerifyRequest(HttpMethod.Post, webhooks[0].PayloadUrl, Times.Exactly(1));
+            _httpMessageHandler.VerifyRequest(HttpMethod.Post, webhooks[0].PayloadUrl, Times.Once());
             _httpMessageHandler.VerifyRequest(HttpMethod.Post, webhooks[1].PayloadUrl, Times.Never());
-            _httpMessageHandler.VerifyRequest(HttpMethod.Post, webhooks[2].PayloadUrl, Times.Exactly(1));
+            _httpMessageHandler.VerifyRequest(HttpMethod.Post, webhooks[2].PayloadUrl, Times.Once());
         }
 
         [Fact]
@@ -57,9 +58,51 @@ namespace Webhooks.Sender.Tests.System.Controllers
 
             // Assert
             _httpMessageHandler.VerifyAnyRequest(Times.Exactly(3));
-            _httpMessageHandler.VerifyRequest(HttpMethod.Post, webhooks[0].PayloadUrl, Times.Exactly(1));
-            _httpMessageHandler.VerifyRequest(HttpMethod.Post, webhooks[1].PayloadUrl, Times.Exactly(1));
-            _httpMessageHandler.VerifyRequest(HttpMethod.Post, webhooks[2].PayloadUrl, Times.Exactly(1));
+            _httpMessageHandler.VerifyRequest(HttpMethod.Post, webhooks[0].PayloadUrl, Times.Once());
+            _httpMessageHandler.VerifyRequest(HttpMethod.Post, webhooks[1].PayloadUrl, Times.Once());
+            _httpMessageHandler.VerifyRequest(HttpMethod.Post, webhooks[2].PayloadUrl, Times.Once());
+        }
+
+        [Fact]
+        public async Task SendWebhooks_ShouldLogFailedRequests()
+        {
+            // Arrange
+            var webhooks = new List<Webhook>
+            {
+                new Webhook { Id = 1, PayloadUrl = "https://url1.com", IsActive = true, CreatedAt = DateTimeOffset.UtcNow },
+                new Webhook { Id = 2, PayloadUrl = "https://url2.com", IsActive = true, CreatedAt = DateTimeOffset.UtcNow },
+                new Webhook { Id = 3, PayloadUrl = "https://url3.com", IsActive = true, CreatedAt = DateTimeOffset.UtcNow },
+            };
+            _dbContext.Webhooks.AddRange(webhooks);
+            _dbContext.SaveChanges();
+
+            _httpMessageHandler.SetupRequest(HttpMethod.Post, webhooks[0].PayloadUrl).ReturnsAsync(new HttpResponseMessage(HttpStatusCode.RequestTimeout), TimeSpan.FromMilliseconds(100));
+            _httpMessageHandler.SetupRequest(HttpMethod.Post, webhooks[1].PayloadUrl).ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError), TimeSpan.FromMilliseconds(500));
+            _httpMessageHandler.SetupRequest(HttpMethod.Post, webhooks[2].PayloadUrl).ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK), TimeSpan.FromMilliseconds(150));
+
+            // Act
+            await _controller.SendWebhooks();
+
+            // Assert
+            VerifyLogError($"Failed to send POST request to {webhooks[0].PayloadUrl}", Times.Once());
+            VerifyLogError($"Failed to send POST request to {webhooks[1].PayloadUrl}", Times.Once());
+            VerifyLogError($"Failed to send POST request to {webhooks[2].PayloadUrl}", Times.Never());
+        }
+
+        private void VerifyLogError(string message, Times times)
+        {
+            _logger.Verify
+            (
+                l => l.Log
+                (
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<object>(o => string.Equals(message, o.ToString(), StringComparison.InvariantCulture)),
+                    It.IsAny<Exception>(),
+                    (Func<object, Exception?, string>)It.IsAny<object>()
+                ),
+                times
+            );
         }
     }
 }
