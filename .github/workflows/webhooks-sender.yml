@@ -37,4 +37,4 @@ jobs:
         run: dotnet build "./web-api/Webhooks.Sender.Tests" --configuration ${{ env.CONFIGURATION }} --no-restore
 
       - name: Webhooks.Sender.Tests - Test
-        run: dotnet test "./web-api/Webhooks.Sender.Tests" --configuration ${{ env.CONFIGURATION }} --no-build --logger "console;verbosity=normal" /p:CollectCoverage=true /p:Threshold=24 /p:ThresholdType=line /p:CoverletOutput="./Coverage/coverage.json"
+        run: dotnet test "./web-api/Webhooks.Sender.Tests" --configuration ${{ env.CONFIGURATION }} --no-build --logger "console;verbosity=normal" /p:CollectCoverage=true /p:Threshold=41 /p:ThresholdType=line /p:CoverletOutput="./Coverage/coverage.json"
