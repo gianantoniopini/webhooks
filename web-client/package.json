@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit --verbose",
     "lint": "vue-cli-service lint --no-fix",
     "serve:production": "http-server ./dist --port 8080 --brotli --gzip --proxy http://localhost:8080?"
   },
@@ -21,16 +22,25 @@
   "devDependencies": {
     "@babel/core": "^7.17.8",
     "@babel/eslint-parser": "^7.17.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/vue": "^6.5.1",
     "@vue/cli-plugin-babel": "^5.0.4",
     "@vue/cli-plugin-eslint": "^5.0.4",
     "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-unit-jest": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "@vue/test-utils": "^2.0.0-0",
+    "@vue/vue3-jest": "^27.0.0-alpha.4",
+    "babel-jest": "^27.5.1",
     "eslint": "^8.12.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jest": "^26.1.4",
+    "eslint-plugin-jest-dom": "^4.0.1",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-sonarjs": "^0.13.0",
     "eslint-plugin-unicorn": "^41.0.1",
     "eslint-plugin-vue": "^8.5.0",
+    "jest": "^27.5.1",
     "prettier": "^2.6.1",
     "vue-cli-plugin-compression": "~1.2.0"
   }

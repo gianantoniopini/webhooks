@@ -11,6 +11,8 @@ module.exports = {
     'plugin:vue/vue3-essential',
     'plugin:vue/vue3-strongly-recommended',
     'plugin:vue/vue3-recommended',
+    'plugin:jest/recommended',
+    'plugin:jest-dom/recommended',
     'plugin:sonarjs/recommended',
     'plugin:unicorn/recommended'
   ],
@@ -37,7 +39,13 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.vue'],
+      files: ['**/__tests__/*.{j,t}s?(x)'],
+      env: {
+        jest: true
+      }
+    },
+    {
+      files: ['*.vue', '**/__tests__/*.{j,t}s?(x)'],
       rules: {
         'unicorn/filename-case': [
           'error',
