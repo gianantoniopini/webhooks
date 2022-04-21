@@ -73,22 +73,6 @@ namespace Webhooks.Sender.Controllers
             return CreatedAtAction(nameof(GetWebhook), new { id = webhook.Id }, webhook);
         }
 
-        // DELETE: api/Webhooks/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWebhook(long id)
-        {
-            var webhook = await _context.Webhooks.FindAsync(id);
-            if (webhook == null)
-            {
-                return NotFound();
-            }
-
-            _context.Webhooks.Remove(webhook);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
         // POST: api/Webhooks/Send
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("Send")]
