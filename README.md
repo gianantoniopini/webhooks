@@ -3,6 +3,7 @@
 Small application to create and send webhooks.
 
 [![Webhooks.Sender](https://github.com/gianantoniopini/webhooks/actions/workflows/webhooks-sender.yml/badge.svg)](https://github.com/gianantoniopini/webhooks/actions/workflows/webhooks-sender.yml)
+[![web-client](https://github.com/gianantoniopini/webhooks/actions/workflows/web-client.yml/badge.svg)](https://github.com/gianantoniopini/webhooks/actions/workflows/web-client.yml)
 
 ## Requirements
 
