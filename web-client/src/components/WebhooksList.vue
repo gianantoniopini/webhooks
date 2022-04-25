@@ -1,18 +1,26 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue';
+import { onMounted, reactive, ref, watch, PropType } from 'vue';
 import { getWebhooks } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';
+import Webhook from '@/interfaces/webhook.interface';
 
 const props = defineProps({
   newWebhook: {
-    type: Object,
-    default: undefined,
+    type: Object as PropType<Webhook>,
+    default() {
+      return {
+        id: 0,
+        payloadUrl: '',
+        isActive: false,
+        createdAt: new Date()
+      };
+    },
     required: false
   }
 });
 
 const loading = ref(false);
-const webhooks = reactive({
+const webhooks: { data: Webhook[] } = reactive({
   data: []
 });
 
@@ -28,7 +36,7 @@ const refresh = async () => {
   }
 };
 
-const formatDate = (date) => {
+const formatDate = (date: Date) => {
   return new Date(date).toUTCString();
 };
 

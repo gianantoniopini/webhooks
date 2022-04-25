@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
-
 import CreateWebhook from '@/components/CreateWebhook.vue';
 import SendWebhooks from '@/components/SendWebhooks.vue';
 import WebhooksList from '@/components/WebhooksList.vue';
+import Webhook from '@/interfaces/webhook.interface';
 
-const newWebhook = reactive({});
+const newWebhook: Webhook = reactive({
+  id: 0,
+  payloadUrl: '',
+  isActive: false,
+  createdAt: new Date()
+});
 
-const onWebhookCreated = (webhook) => {
-  newWebhook.value = webhook;
+const onWebhookCreated = (webhook: Webhook) => {
+  newWebhook.id = webhook.id;
+  newWebhook.payloadUrl = webhook.payloadUrl;
+  newWebhook.isActive = webhook.isActive;
+  newWebhook.createdAt = webhook.createdAt;
 };
 </script>
 

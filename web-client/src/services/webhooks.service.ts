@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import CreateWebhookRequest from '@/interfaces/create-webhook-request.interface';
 import Webhook from '@/interfaces/webhook.interface';
 
@@ -21,10 +21,12 @@ const createWebhook = async (
 ): Promise<Webhook> => {
   const request: CreateWebhookRequest = { payloadUrl, isActive };
 
-  return await axiosInstance.post<CreateWebhookRequest, Webhook>(
-    '/Webhooks',
-    request
-  );
+  const { data: webhook } = await axiosInstance.post<
+    CreateWebhookRequest,
+    AxiosResponse<Webhook>
+  >('/Webhooks', request);
+
+  return webhook;
 };
 
 const sendWebhooks = async () => {
