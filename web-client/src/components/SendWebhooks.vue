@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import { connection, start } from '@/hubs/notification-hub';
 import { sendWebhooks } from '@/services/webhooks.service';
@@ -19,7 +19,7 @@ const onSend = async () => {
   }
 };
 
-const onWebhookReceived = (webhookPayload) => {
+const onWebhookReceived = (webhookPayload: { message: string }) => {
   createToast(
     `Received webhook payload with message '${webhookPayload.message}'`,
     {

@@ -6,10 +6,10 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageThreshold: {
     global: {
-      lines: 55
+      lines: 63
     }
   },
-  preset: '@vue/cli-plugin-unit-jest',
-  setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
-  testMatch: ['**/__tests__/**/*.Test.js']
+  preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
+  setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
+  testMatch: ['**/__tests__/**/*.Test.ts']
 };

@@ -6,18 +6,19 @@ module.exports = {
     'vue/setup-compiler-macros': true
   },
   extends: [
-    'eslint:recommended',
-    'plugin:prettier/recommended',
     'plugin:vue/vue3-essential',
     'plugin:vue/vue3-strongly-recommended',
     'plugin:vue/vue3-recommended',
+    'eslint:recommended',
+    '@vue/typescript/recommended',
     'plugin:jest/recommended',
     'plugin:jest-dom/recommended',
+    'plugin:prettier/recommended',
     'plugin:sonarjs/recommended',
     'plugin:unicorn/recommended'
   ],
   parserOptions: {
-    parser: '@babel/eslint-parser'
+    ecmaVersion: 2020
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -45,7 +46,7 @@ module.exports = {
       }
     },
     {
-      files: ['*.vue', '**/__tests__/*.{j,t}s?(x)'],
+      files: ['*.vue', '**/__tests__/**/*.{j,t}s?(x)'],
       rules: {
         'unicorn/filename-case': [
           'error',

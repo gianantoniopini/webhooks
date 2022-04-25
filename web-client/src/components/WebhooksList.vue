@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue';
 import { getWebhooks } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';

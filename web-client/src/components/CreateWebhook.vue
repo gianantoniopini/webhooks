@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue';
 import { createWebhook } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';
@@ -38,7 +38,7 @@ const onCreate = async () => {
   }
 };
 
-const validatePayloadUrl = (value) => {
+const validatePayloadUrl = (value: string) => {
   validationErrors.payloadUrl = '';
 
   if (!value || !value.trim()) {

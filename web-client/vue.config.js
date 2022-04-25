@@ -12,7 +12,7 @@ module.exports = defineConfig({
   lintOnSave: false,
   pages: {
     index: {
-      entry: 'src/main.js',
+      entry: 'src/main.ts',
       title: 'Webhooks'
     }
   },
