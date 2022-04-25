@@ -4,6 +4,7 @@ import { connection, start } from '@/hubs/notification-hub';
 import { sendWebhooks } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';
 import { createToast } from 'mosha-vue-toastify';
+import WebhookPayload from '@/interfaces/webhook-payload.interface';
 
 const loading = ref(false);
 
@@ -19,7 +20,7 @@ const onSend = async () => {
   }
 };
 
-const onWebhookReceived = (webhookPayload: { message: string }) => {
+const onWebhookReceived = (webhookPayload: WebhookPayload) => {
   createToast(
     `Received webhook payload with message '${webhookPayload.message}'`,
     {
