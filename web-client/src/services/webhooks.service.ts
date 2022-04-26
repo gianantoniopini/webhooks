@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import CreateWebhookRequest from '@/interfaces/create-webhook-request.interface';
-import Webhook from '@/interfaces/webhook.interface';
+import { CreateWebhookRequest, Webhook } from '@/types';
 
 const axiosInstance = axios.create({
   baseURL: process.env.VUE_APP_WEBHOOKS_SENDER_API_BASE_URL,

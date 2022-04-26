@@ -2,7 +2,7 @@
 import { computed, reactive, ref, watch } from 'vue';
 import { createWebhook } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';
-import Webhook from '@/interfaces/webhook.interface';
+import { Webhook } from '@/types';
 
 const loading = ref(false);
 const payloadUrl = ref('');

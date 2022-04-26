@@ -2,18 +2,13 @@
 import { onMounted, reactive, ref, watch, PropType } from 'vue';
 import { getWebhooks } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';
-import Webhook from '@/interfaces/webhook.interface';
+import { Webhook } from '@/types';
 
 const props = defineProps({
   newWebhook: {
     type: Object as PropType<Webhook>,
     default() {
-      return {
-        id: 0,
-        payloadUrl: '',
-        isActive: false,
-        createdAt: new Date()
-      };
+      return new Webhook();
     },
     required: false
   }

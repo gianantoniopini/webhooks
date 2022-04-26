@@ -4,7 +4,7 @@ import { connection, start } from '@/hubs/notification-hub';
 import { sendWebhooks } from '@/services/webhooks.service';
 import { handleError } from '@/utils/error-handling';
 import { createToast } from 'mosha-vue-toastify';
-import WebhookPayload from '@/interfaces/webhook-payload.interface';
+import { WebhookPayload } from '@/types';
 
 const loading = ref(false);
 
