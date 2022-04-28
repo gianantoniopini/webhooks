@@ -1,12 +1,6 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
+import axiosInstance from '@/utils/http-utils';
 import { CreateWebhookRequest, Webhook } from '@/types';
-
-const axiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_WEBHOOKS_SENDER_API_BASE_URL,
-  headers: {
-    'Content-type': 'application/json'
-  }
-});
 
 const getWebhooks = async (): Promise<Webhook[]> => {
   const { data } = await axiosInstance.get<Webhook[]>('/Webhooks');

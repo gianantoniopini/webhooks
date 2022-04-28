@@ -1,8 +1,23 @@
 import { render, screen } from '@testing-library/vue';
+import AxiosMockAdapter from 'axios-mock-adapter';
+import axiosInstance from '@/utils/http-utils';
+import {
+  mockNotificationHubConnectionStart,
+  mockGetWebhooksRequest,
+  waitForRefreshButtonToBeDisabled,
+  waitForRefreshButtonToBeEnabled
+} from '@/components/__tests__/helpers/TheWebhooks.Helper';
 import App from '../App.vue';
 import router from '@/router';
 
+const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
+  delayResponse: 500
+});
+
 const setup = async () => {
+  mockNotificationHubConnectionStart();
+  mockGetWebhooksRequest(axiosMockAdapter, []);
+
   render(App, {
     global: {
       plugins: [router]
@@ -10,6 +25,9 @@ const setup = async () => {
   });
 
   await router.isReady();
+
+  await waitForRefreshButtonToBeDisabled();
+  await waitForRefreshButtonToBeEnabled();
 };
 
 it('renders Webhooks heading', async () => {
@@ -20,4 +38,9 @@ it('renders Webhooks heading', async () => {
       name: 'Webhooks'
     })
   ).toBeInTheDocument();
+});
+
+afterEach(async () => {
+  axiosMockAdapter.reset();
+  jest.restoreAllMocks();
 });
