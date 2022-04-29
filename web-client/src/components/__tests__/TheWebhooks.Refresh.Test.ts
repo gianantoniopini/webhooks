@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/vue';
+import { fireEvent, screen } from '@testing-library/vue';
 import AxiosMockAdapter from 'axios-mock-adapter';
 import axiosInstance from '@/utils/http-utils';
 import {
@@ -6,8 +6,8 @@ import {
   mockGetWebhooksRequest,
   mockNotificationHubConnectionStart,
   renderComponent,
-  waitForRefreshButtonToBeDisabled,
-  waitForRefreshButtonToBeEnabled
+  waitForLoadingMessageToAppear,
+  waitForLoadingMessageToDisappear
 } from './helpers/TheWebhooks.Helper';
 
 const axiosMockAdapter = new AxiosMockAdapter(axiosInstance, {
@@ -25,8 +25,8 @@ const setup = async (
 
   renderComponent();
 
-  await waitForRefreshButtonToBeDisabled();
-  await waitForRefreshButtonToBeEnabled();
+  await waitForLoadingMessageToAppear();
+  await waitForLoadingMessageToDisappear();
 
   const refreshButton = screen.getByRole('button', {
     name: 'Refresh'
@@ -44,12 +44,10 @@ describe('clicking the Refresh button', () => {
 
     await fireEvent.click(refreshButton);
 
-    await waitFor(() => {
-      expect(refreshButton).toBeDisabled();
-    });
-    await waitFor(() => {
-      expect(refreshButton).toBeEnabled();
-    });
+    await waitForLoadingMessageToAppear();
+    expect(refreshButton).toBeDisabled();
+    await waitForLoadingMessageToDisappear();
+    expect(refreshButton).toBeEnabled();
   });
 
   it('renders Error message if api request fails', async () => {

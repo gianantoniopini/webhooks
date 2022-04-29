@@ -51,32 +51,19 @@ export const renderComponent = () => {
   render(TheWebhooks);
 };
 
-const isRefreshButtonDisabled = async (): Promise<boolean> => {
-  const refreshButton = await screen.findByRole('button', {
-    name: 'Refresh'
-  });
+const loadingMessage = 'Loading data, please wait...';
 
-  return refreshButton.hasAttribute('disabled');
+export const waitForLoadingMessageToAppear = async (): Promise<HTMLElement> => {
+  return await screen.findByText(loadingMessage);
 };
 
-export const waitForRefreshButtonToBeDisabled = async () => {
+export const waitForLoadingMessageToDisappear = async (): Promise<void> => {
   await waitFor(
-    async () => {
-      return (await isRefreshButtonDisabled())
+    () => {
+      return screen.queryByText(loadingMessage) === null
         ? Promise.resolve()
         : Promise.reject();
     },
-    { timeout: 2000 }
-  );
-};
-
-export const waitForRefreshButtonToBeEnabled = async () => {
-  await waitFor(
-    async () => {
-      return (await isRefreshButtonDisabled())
-        ? Promise.reject()
-        : Promise.resolve();
-    },
-    { timeout: 2000 }
+    { timeout: 1000 }
   );
 };

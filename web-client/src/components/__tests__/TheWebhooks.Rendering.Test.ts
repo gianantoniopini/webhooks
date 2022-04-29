@@ -26,8 +26,10 @@ const setup = (webhooksCount: number) => {
 };
 
 it('renders Registered Webhooks', async () => {
-  const { webhooks } = setup(10);
+  const webhooksCount = 10;
+  const { webhooks } = setup(webhooksCount);
 
+  expect(webhooks).toHaveLength(webhooksCount);
   for (const webhook of webhooks) {
     const id = await screen.findByText(webhook.id);
     expect(id).toBeInTheDocument();

@@ -61,7 +61,8 @@ onMounted(() => {
       </button>
     </div>
     <div class="col-12 pt-2">
-      <table class="table table-responsive">
+      <div v-if="loading" class="text-center fw-light py-4">Loading data, please wait...</div>
+      <table v-else class="table table-responsive">
         <thead class="table-light">
           <tr>
             <th scope="col">

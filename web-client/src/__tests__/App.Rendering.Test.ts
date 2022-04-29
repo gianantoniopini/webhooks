@@ -4,8 +4,8 @@ import axiosInstance from '@/utils/http-utils';
 import {
   mockNotificationHubConnectionStart,
   mockGetWebhooksRequest,
-  waitForRefreshButtonToBeDisabled,
-  waitForRefreshButtonToBeEnabled
+  waitForLoadingMessageToAppear,
+  waitForLoadingMessageToDisappear
 } from '@/components/__tests__/helpers/TheWebhooks.Helper';
 import App from '../App.vue';
 import router from '@/router';
@@ -26,8 +26,8 @@ const setup = async () => {
 
   await router.isReady();
 
-  await waitForRefreshButtonToBeDisabled();
-  await waitForRefreshButtonToBeEnabled();
+  await waitForLoadingMessageToAppear();
+  await waitForLoadingMessageToDisappear();
 };
 
 it('renders Webhooks heading', async () => {
